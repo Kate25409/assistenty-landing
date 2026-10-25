@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ассистенты — AI для самоменеджмента хронических заболеваний</title>
+  <meta name="description" content="AI-ассистент в мессенджере: держит контекст дня и помогает понять, почему сахар ведёт себя так. Первый этап — для людей с сахарным диабетом 1 типа. Не врач, не дозы, не помпа.">
+  <meta property="og:title" content="Ассистенты">
+  <meta property="og:description" content="AI для самоменеджмента хронических заболеваний. Beachhead — ассистент для СД1 в мессенджере.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/logo_ph2_transparent.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Geist:wght@400;800&family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-background: #ffffff;
+      --color-foreground: #000000;
+      --color-primary: #e85d04;
+      --color-secondary: #ffd60a;
+      --color-accent: #3a86ff;
+      --color-muted: #e5e5e5;
+      --font-body: 'EB Garamond', Georgia, serif;
+      --font-heading: 'Geist', Arial, sans-serif;
+      --font-mono: 'Geist Mono', 'Courier New', monospace;
+      --shadow: 4px 4px 0px 0px #000000;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-background);
+      color: var(--color-foreground);
+      font-size: 20px;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1.5rem;
+      background: #fff;
+      border-bottom: 3px solid #000;
+    }
+
+    .nav__brand {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    .nav__cta {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid #000;
+      background: var(--color-secondary);
+      box-shadow: 3px 3px 0 #000;
+      padding: 0.4rem 0.75rem;
+      white-space: nowrap;
+    }
+
+    .nav__cta:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 #000; }
+
+    .section {
+      padding: 4.5rem 1.5rem;
+      border-bottom: 3px solid #000;
+    }
+
+    .section--primary { background: var(--color-primary); color: #fff; }
+    .section--accent { background: var(--color-accent); color: #fff; }
+    .section--secondary { background: var(--color-secondary); color: #000; }
+    .section--muted { background: var(--color-muted); color: #000; }
+    .section--dark { background: #000; color: #fff; }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .label {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      opacity: 0.85;
+    }
+
+    h1, h2 {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    h1 { font-size: clamp(2.6rem, 8vw, 4.2rem); margin-bottom: 1rem; max-width: 16ch; }
+    h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: 1.25rem; max-width: 22ch; }
+
+    .talk {
+      font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+      max-width: 40rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .talk strong { font-family: var(--font-heading); font-weight: 800; }
+
+    .talk--soft {
+      font-size: 1.05rem;
+      opacity: 0.8;
+      max-width: 36rem;
+      margin-top: -0.35rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 3px solid #000;
+      box-shadow: var(--shadow);
+      padding: 0.7rem 1.1rem;
+    }
+
+    .btn--yellow { background: var(--color-secondary); color: #000; }
+    .btn--white { background: #fff; color: #000; }
+    .btn--ghost { background: transparent; color: inherit; border-color: currentColor; box-shadow: 4px 4px 0 currentColor; }
+
+    .btn:hover { transform: translate(1px, 1px); box-shadow: 3px 3px 0 #000; }
+
+    .hero {
+      min-height: calc(100vh - 58px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      padding-top: 3rem;
+      padding-bottom: 5rem;
+    }
+
+    .hero__logo {
+      position: absolute;
+      right: 1.25rem;
+      bottom: 1.25rem;
+      width: min(28vw, 160px);
+      height: auto;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .split-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .panel {
+      border: 3px solid #000;
+      box-shadow: var(--shadow);
+      background: #fff;
+      padding: 1.25rem 1.35rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
+    }
+
+    .panel__label {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      opacity: 0.7;
+    }
+
+    .panel__stat {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .panel__source {
+      margin-top: auto;
+      padding-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+
+    .panel__source a { color: var(--color-accent); }
+
+    .quote {
+      border-left: 4px solid #000;
+      padding-left: 0.9rem;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      line-height: 1.45;
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-style: normal;
+      opacity: 0.7;
+    }
+
+    .shots {
+      display: flex;
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+
+    .shots__col {
+      flex: 1 1 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .shots img {
+      display: block;
+      width: 100%;
+      border: 3px solid #000;
+      box-shadow: var(--shadow);
+      background: #000;
+    }
+
+    .shots__caption {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    .utp-video {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .utp-video video {
+      width: 100%;
+      max-width: 720px;
+      height: auto;
+      background: transparent;
+    }
+
+    .comp-wrap { overflow-x: auto; margin-top: 1.5rem; }
+
+    table.comp {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+      background: #fff;
+      border: 3px solid #000;
+      box-shadow: var(--shadow);
+      font-size: 0.95rem;
+    }
+
+    table.comp th, table.comp td {
+      border: 2px solid #000;
+      padding: 0.65rem 0.7rem;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    table.comp th {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.9rem;
+      background: var(--color-muted);
+    }
+
+    table.comp th.us { background: var(--color-secondary); }
+
+    table.comp td.row-label {
+      text-align: left;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    table.comp td.us-col { background: #fff8d0; }
+    table.comp .yes { color: #38b000; font-weight: 700; }
+    table.comp .no { opacity: 0.45; }
+    table.comp .partial { color: #e85d04; font-weight: 700; }
+
+    .comp-note {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      max-width: 50rem;
+    }
+
+    .comp-note a { color: var(--color-accent); }
+
+    .market-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .market-card {
+      background: #fff;
+      border: 3px solid #000;
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.35rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 240px;
+    }
+
+    .market-card__head {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.55rem;
+      line-height: 1.2;
+    }
+
+    .market-card__head span {
+      display: block;
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+      opacity: 0.7;
+    }
+
+    .market-card__rule {
+      border: none;
+      border-top: 2px solid #000;
+      margin: 0.9rem 0 1rem;
+    }
+
+    .market-card__body {
+      font-size: 1.05rem;
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .market-note {
+      margin-top: 1.5rem;
+      font-size: 1.25rem;
+      max-width: 40rem;
+    }
+
+    .roadmap {
+      margin-top: 1.75rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .roadmap__item {
+      border: 3px solid #000;
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-height: 140px;
+    }
+
+    .roadmap__when {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      align-self: flex-start;
+      border: 2px solid #000;
+      background: var(--color-secondary);
+      padding: 0.2rem 0.55rem;
+    }
+
+    .roadmap__card {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+
+    .roadmap__note {
+      margin-top: 1.5rem;
+      font-size: 1.25rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.75rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .contact-list li {
+      font-size: 1.2rem;
+      padding-left: 1rem;
+      border-left: 4px solid rgba(255,255,255,0.55);
+    }
+
+    .contact-list a {
+      color: var(--color-secondary);
+      font-family: var(--font-heading);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .disclaimer {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      opacity: 0.7;
+      max-width: 40rem;
+    }
+
+    .footer-logo {
+      width: min(28vw, 140px);
+      height: auto;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .split-2, .market-row, .roadmap, .footer-grid { grid-template-columns: 1fr; }
+      .hero__logo { width: 110px; }
+      .nav { padding: 0.75rem 1rem; }
+      .section { padding: 3rem 1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .btn:hover, .nav__cta:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <a class="nav__brand" href="#top">Ассистенты</a>
+    <a class="nav__cta" href="https://t.me/KaterinaaRomanova" target="_blank" rel="noopener">Написать в Telegram</a>
+  </header>
+
+  <main id="top">
+    <section class="section section--primary hero">
+      <div class="wrap">
+        <div class="label">Проект · SechenovTech</div>
+        <h1>Ассистенты</h1>
+        <p class="talk">AI для самоменеджмента хронических заболеваний.</p>
+        <p class="talk talk--soft">Первый этап продукта — ассистент для людей с сахарным диабетом 1 типа в мессенджере.</p>
+        <div class="cta-row">
+          <a class="btn btn--yellow" href="https://t.me/KaterinaaRomanova" target="_blank" rel="noopener">Связаться</a>
+          <a class="btn btn--ghost" href="#problem">Как это работает</a>
+        </div>
+      </div>
+      <img class="hero__logo" src="assets/logo_ph2_transparent.png" alt="my_sugar_assist" width="160" height="160">
+    </section>
+
+    <section class="section" id="problem">
+      <div class="wrap">
+        <div class="label">Проблема</div>
+        <h2>Менеджмент ежедневной рутины требует ресурса 24/7.</h2>
+        <div class="split-2">
+          <aside class="panel">
+            <div class="panel__label">EASD · диабетический дистресс</div>
+            <div class="panel__stat">до 80%</div>
+            <p>сталкиваются с эмоциональной нагрузкой из‑за проблем, связанных с диабетом.</p>
+            <p class="panel__source">
+              EASD 2026 ·
+              <a href="https://doi.org/10.1007/s00125-026-06840-0" target="_blank" rel="noopener">doi:10.1007/s00125-026-06840-0</a>
+            </p>
+          </aside>
+          <aside class="panel">
+            <div class="panel__label">Кастдев · голоса</div>
+            <blockquote class="quote">
+              «Раз в полгода на пару недель-месяц я могу подробно начать записывать… Но чтобы делать это каждый день в течение всей жизни, меня на это не хватает.»
+              <cite>— респондент 1</cite>
+            </blockquote>
+            <blockquote class="quote">
+              «Диабетик часто не понимает, что происходит [с сахаром]; я не исключение.»
+              <cite>— респондент 2</cite>
+            </blockquote>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--accent" id="solution">
+      <div class="wrap">
+        <div class="label">Решение</div>
+        <h2>Данные о сахаре есть. Понимания, почему они такие, — ещё нет.</h2>
+        <div class="shots" aria-label="Скриншоты решения">
+          <div class="shots__col">
+            <img src="assets/pics/ns_1.jpg" alt="Nightscout — текущий сахар и прогноз">
+            <img src="assets/pics/ns_2.jpg" alt="Nightscout — разбор по дням">
+            <div class="shots__caption">As is</div>
+          </div>
+          <div class="shots__col">
+            <img src="assets/pics/tg.png" alt="Telegram-ассистент — ответ про гипо">
+            <div class="shots__caption">To be</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="utp">
+      <div class="wrap">
+        <div class="label">Ценность</div>
+        <h2>Силы, которые тратили на менеджмент, теперь можно потратить на жизнь.</h2>
+        <p class="talk">Ассистент держит контекст дня и помогает связать события с глюкозой. Решение по терапии остаётся за человеком: не врач, не дозы, не управление помпой.</p>
+        <div class="utp-video">
+          <video src="animation/morning_assist_comic.mp4" autoplay muted loop playsinline controls></video>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--muted" id="competitors">
+      <div class="wrap">
+        <div class="label">Конкуренты</div>
+        <h2>Никто не собирает и не трактует данные для СД1 в одном месте.</h2>
+        <div class="comp-wrap">
+          <table class="comp">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Офиц. петли (AID)</th>
+                <th>AAPS</th>
+                <th>AI-помощник<br>СберЗдоровье</th>
+                <th class="us">Ассистенты</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-label">Поток данных: глюкоза</td>
+                <td class="yes">✓</td>
+                <td class="yes">✓</td>
+                <td class="partial">~</td>
+                <td class="us-col yes">✓</td>
+              </tr>
+              <tr>
+                <td class="row-label">Контекст дня целиком</td>
+                <td class="no">—</td>
+                <td class="no">—</td>
+                <td class="no">—</td>
+                <td class="us-col yes">✓</td>
+              </tr>
+              <tr>
+                <td class="row-label">Инсайты из данных</td>
+                <td class="no">—</td>
+                <td class="partial">слабо</td>
+                <td class="partial">общие советы</td>
+                <td class="us-col yes">✓</td>
+              </tr>
+              <tr>
+                <td class="row-label">Персональная память организма</td>
+                <td class="partial">алгоритм</td>
+                <td class="partial">профиль</td>
+                <td class="partial">ЭМК / сессия</td>
+                <td class="us-col yes">✓</td>
+              </tr>
+              <tr>
+                <td class="row-label">Дозирует / управляет помпой</td>
+                <td class="yes">✓</td>
+                <td class="yes">✓</td>
+                <td class="no">—</td>
+                <td class="us-col no">нет</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="comp-note">Сбер: AI-помощник в СберЗдоровье — симптомы, анализы, врачи, lifestyle. Источник: <a href="https://www.sberbank.ru/ru/sberpress/all/article?newsID=12b6a9d8-4a02-4e78-85e6-7403793ea12d&amp;blockID=1303&amp;regionID=77&amp;lang=ru" target="_blank" rel="noopener">пресс-релиз Сбера, 18.06.2025</a>.</p>
+      </div>
+    </section>
+
+    <section class="section section--secondary" id="market">
+      <div class="wrap">
+        <div class="label">Рынок и модель</div>
+        <h2>Рынок и модель</h2>
+        <div class="market-row">
+          <article class="market-card">
+            <div class="market-card__head">
+              <span>TAM</span>
+              ~50 млн чел.
+            </div>
+            <hr class="market-card__rule">
+            <p class="market-card__body">Перспективная линейка: люди в РФ+СНГ с ≥1 из 5 нозологий — бронхиальная астма, аллергический ринит, мигрень, эпилепсия, атопический дерматит.</p>
+          </article>
+          <article class="market-card">
+            <div class="market-card__head">
+              <span>SAM</span>
+              ~1,4 млрд ₽/год
+            </div>
+            <hr class="market-card__rule">
+            <p class="market-card__body">~200k людей с СД1 и НМГ в РФ</p>
+          </article>
+          <article class="market-card">
+            <div class="market-card__head">
+              <span>SOM · год 1</span>
+              ~3,5–7 млн ₽
+            </div>
+            <hr class="market-card__rule">
+            <p class="market-card__body">500–1000 с подпиской Pro</p>
+          </article>
+        </div>
+        <p class="market-note">Модель: старт B2C freemium, далее B2B.</p>
+      </div>
+    </section>
+
+    <section class="section" id="plan">
+      <div class="wrap">
+        <div class="label">План</div>
+        <h2>К первой тысяче платящих клиентов за год.</h2>
+        <div class="roadmap" aria-label="Таймлайн развития">
+          <div class="roadmap__item">
+            <div class="roadmap__when">+1 мес</div>
+            <div class="roadmap__card">Заканчиваю пилот</div>
+          </div>
+          <div class="roadmap__item">
+            <div class="roadmap__when">+3 мес</div>
+            <div class="roadmap__card">Внешняя бета</div>
+          </div>
+          <div class="roadmap__item">
+            <div class="roadmap__when">+1 год</div>
+            <div class="roadmap__card">Первые 1000 платящих</div>
+          </div>
+          <div class="roadmap__item">
+            <div class="roadmap__when">+3 года</div>
+            <div class="roadmap__card">Расширение нозологий + B2B</div>
+          </div>
+        </div>
+        <p class="roadmap__note">Northstar: снижение диабетического дистресса.</p>
+      </div>
+    </section>
+
+    <section class="section section--dark" id="contact">
+      <div class="wrap">
+        <div class="label">Контакты</div>
+        <h2>Команда проекта</h2>
+        <div class="footer-grid">
+          <div>
+            <p class="talk" style="color:#fff; margin-bottom:1rem;">Романова Катя — data-аналитик / разработчик, СД1 ~20 лет. Рядом — мед- и IT-консультанты.</p>
+            <ul class="contact-list">
+              <li>Telegram: <a href="https://t.me/KaterinaaRomanova" target="_blank" rel="noopener">@KaterinaaRomanova</a></li>
+              <li>Телефон: <a href="tel:+79319629202">+7 931 962-92-02</a></li>
+            </ul>
+            <p class="disclaimer">Wellness-ассистент: не ставит диагнозы, не рекомендует дозы и не управляет помпой. Медицинские решения — за вами и врачом.</p>
+            <div class="cta-row">
+              <a class="btn btn--yellow" href="https://t.me/KaterinaaRomanova" target="_blank" rel="noopener">Написать в Telegram</a>
+            </div>
+          </div>
+          <div>
+            <img class="footer-logo" src="assets/logo_ph2_transparent.png" alt="my_sugar_assist" width="140" height="140">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

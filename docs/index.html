@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Ассистенты — AI для самоменеджмента хронических заболеваний</title>
   <meta name="description" content="AI-ассистент в мессенджере: держит контекст дня и помогает понять, почему сахар ведёт себя так. Первый этап — для людей с сахарным диабетом 1 типа. Не врач, не дозы, не помпа.">
   <meta property="og:title" content="Ассистенты">
@@ -27,7 +27,11 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
     body {
       font-family: var(--font-body);
@@ -423,10 +427,84 @@
     }
 
     @media (max-width: 800px) {
+      body { font-size: 18px; }
+
       .quotes, .do-grid { grid-template-columns: 1fr; }
-      .hero__logo { width: 100px; }
-      .nav { padding: 0.75rem 1rem; }
-      .section { padding: 3rem 1rem; }
+
+      h1, h2 { max-width: none; }
+
+      .nav {
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+        padding-bottom: 0.75rem;
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+      }
+
+      .nav__cta {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .section {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+      }
+
+      .section:last-of-type {
+        padding-bottom: max(3rem, calc(2rem + env(safe-area-inset-bottom)));
+      }
+
+      .hero {
+        min-height: calc(100vh - 58px);
+        min-height: calc(100svh - 58px);
+        padding-top: 2rem;
+        padding-bottom: 6.5rem;
+      }
+
+      .hero__logo {
+        width: 96px;
+        right: max(1rem, env(safe-area-inset-right));
+        bottom: max(1rem, env(safe-area-inset-bottom));
+      }
+
+      .btn {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .shots { gap: 1.75rem; }
+
+      .quote-card,
+      .gap-list li,
+      .data-steps li,
+      .do-box,
+      .talk,
+      .audience {
+        overflow-wrap: break-word;
+      }
+
+      .shots__media img,
+      .utp-video video {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cta-row { width: 100%; }
+      .cta-row .btn { width: 100%; }
+      .hero__logo { width: 84px; }
+      .section:not(.hero) { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+      .section:last-of-type {
+        padding-bottom: max(2.5rem, calc(2rem + env(safe-area-inset-bottom)));
+      }
+      .hero { padding-bottom: 6.5rem; }
+      .label { font-size: 0.8rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {

@@ -4,7 +4,7 @@
 
 **Live:** https://kate25409.github.io/assistenty-landing/
 
-Стиль и тексты — из demo day pitch `sechenov_tech/demo_day/assistenty_demo_day_draft.html`.
+Стиль — Agency / demo day pitch. Нарратив — продажный лендинг для внешних людей (не инвесторский питч): боль → как выглядит → что делает / не делает → для кого → контакт.
 
 ## Локально
 

@@ -260,7 +260,20 @@
       min-width: 0;
     }
 
-    .shots img {
+    .shots__media {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-height: 0;
+    }
+
+    .shots__media--center {
+      justify-content: center;
+      align-items: center;
+    }
+
+    .shots__media img {
       display: block;
       width: 100%;
       border: 3px solid #000;
@@ -269,6 +282,7 @@
     }
 
     .shots__caption {
+      flex-shrink: 0;
       font-family: var(--font-heading);
       font-weight: 800;
       letter-spacing: 0.08em;
@@ -328,6 +342,30 @@
       padding-left: 1rem;
       border-left: 4px solid #000;
       line-height: 1.4;
+    }
+
+    .data-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+      max-width: 42rem;
+    }
+
+    .data-steps li {
+      font-size: 1.15rem;
+      line-height: 1.45;
+      padding: 1rem 1.15rem;
+      border: 3px solid #000;
+      box-shadow: var(--shadow);
+      background: #fff;
+      color: #000;
+    }
+
+    .data-steps strong {
+      font-family: var(--font-heading);
+      font-weight: 800;
     }
 
     .audience {
@@ -408,15 +446,15 @@
       <div class="wrap">
         <h1>Ассистенты</h1>
         <p class="talk">AI для самоменеджмента хронических заболеваний.</p>
-        <p class="talk" style="font-size:1.1rem; opacity:0.88; margin-top:-0.35rem;">Первый этап — ассистент для людей с СД1 в мессенджере: меньше держать день в голове, больше понимать, <strong>почему</strong> сахар ведёт себя так.</p>
+        <p class="talk" style="font-size:1.1rem; opacity:0.88; margin-top:-0.35rem;">my_sugar_assist — ассистент для людей с СД1 в мессенджере: меньше держать день в голове, больше понимать, <strong>почему</strong> сахар ведёт себя так.</p>
       </div>
       <img class="hero__logo" src="assets/logo_ph2_transparent.png" alt="" width="150" height="150">
     </section>
 
     <section class="section" id="recognize">
       <div class="wrap">
-        <div class="label">Узнаёшь себя?</div>
-        <h2>Сахар есть. Сил разбирать день — не всегда.</h2>
+        <div class="label"></div>
+        <h2>Данные о сахаре есть. Силы понимать почему они такие — не всегда.</h2>
         <div class="quotes">
           <blockquote class="quote-card">
             <p>«Раз в полгода на пару недель-месяц я могу подробно начать записывать… Но чтобы делать это каждый день в течение всей жизни, меня на это не хватает.»</p>
@@ -427,28 +465,28 @@
             <cite>— из разговоров с людьми с СД1</cite>
           </blockquote>
         </div>
-        <p class="footnote">Эмоциональная нагрузка из‑за диабета знакома очень многим — до 80% в исследованиях диабетического дистресса (<a href="https://doi.org/10.1007/s00125-026-06840-0" target="_blank" rel="noopener">EASD</a>).</p>
+        <p class="footnote">Эмоциональная нагрузка из‑за диабета знакома очень многим — согласно исследованиям о диабетическом дистрессе до 80% людей сталкиваются с эмоциональными проблемами (<a href="https://doi.org/10.1007/s00125-026-06840-0" target="_blank" rel="noopener">EASD</a>).</p>
       </div>
     </section>
 
     <section class="section section--muted" id="gap">
       <div class="wrap">
         <div class="label">Что уже есть</div>
-        <h2>Сахар и инсулин на графиках — есть. Смысла дня — нет.</h2>
-        <p class="talk">Петли, помпы и приложения уже показывают сложные кривые. На них видны очевидные вылеты. Но без контекста дня непонятно, <strong>почему</strong> так вышло.</p>
+        <h2>Сахар и инсулин уже есть на графиках. Контекста дня на них нет.</h2>
+        <p class="talk">Петли, помпы и приложения уже показывают сложные графики глюкозы. Но без контекста дня непонятно, <strong>почему</strong> так вышло.</p>
         <ul class="gap-list">
-          <li><strong>Есть:</strong> глюкоза, инсулин, иногда углеводы — плотные графики и отчёты.</li>
-          <li><strong>Есть:</strong> очевидные пики и провалы, которые и так бросаются в глаза.</li>
-          <li><strong>Нет:</strong> контекст дня целиком — сон, стресс, цикл, нагрузка, «что ела и когда» — в одном месте со смыслом.</li>
+          <li><strong>Есть:</strong> глюкоза, инсулин, углеводы — плотные графики и отчёты.</li>
+          <li><strong>Есть:</strong> очевидные пики и провалы, которые бросаются в глаза.</li>
+          <li><strong>Нет:</strong> контекст дня целиком — сон, стресс, цикл, нагрузка, какая именно еда — в одном месте помогает четче видеть смысл в данных.</li>
         </ul>
-        <p class="gap-list__missing">Ассистент как раз про слой посередине: не ещё один график, а <strong>трактовка</strong> — связать данные с тем, что происходило в жизни.</p>
+        <p class="gap-list__missing">Ассистент как раз про слой посередине: не ещё один график, а <strong>трактовка</strong> — он связывает данные о сахаре с тем, что происходило в жизни.</p>
       </div>
     </section>
 
     <section class="section section--accent" id="looks">
       <div class="wrap">
         <div class="label">Как выглядит</div>
-        <h2>От «просто кривая» — к ответу в чате.</h2>
+        <h2>От cухих графиков — к общению в чате.</h2>
         <div class="shots" aria-label="Скриншоты">
           <div class="shots__col">
             <img src="assets/pics/ns_1.jpg" alt="Графики глюкозы без объяснения дня">
@@ -466,8 +504,8 @@
     <section class="section" id="life">
       <div class="wrap">
         <div class="label">Зачем</div>
-        <h2>Силы, которые уходили на менеджмент, — обратно в жизнь.</h2>
-        <p class="talk">Не «ещё один отчёт», а короткий разбор: что в дне могло повлиять и на что обратить внимание.</p>
+        <h2>Силы, которые уходили на менеджмент диабета, возвращаются обратно в жизнь.</h2>
+        <p class="talk">Мы получаем не еще один отчет, а короткий разбор: что в дне могло повлиять на сахара и на что обратить внимание. </p>
         <div class="utp-video">
           <video src="animation/morning_assist_comic.mp4" autoplay muted loop playsinline controls></video>
         </div>
@@ -496,6 +534,19 @@
             </ul>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section section--accent" id="data">
+      <div class="wrap">
+        <div class="label">Данные</div>
+        <h2>Без данных смысла меньше. Собирать их — не должно быть работой.</h2>
+        <p class="talk">Чтобы связать день с сахаром, ассистенту нужны события жизни. Часть уже есть в устройствах и приложениях, которыми вы пользуетесь. Остальное — можно просто наговорить.</p>
+        <ul class="data-steps">
+          <li><strong>Автоматически</strong> — с wellness‑устройств и приложений, которые уже в деле (сенсор / мониторинг глюкозы, шаги, цикл и другое, что удаётся подключить).</li>
+          <li><strong>Голосом в мессенджере</strong> — всё, что не собралось само: еда, стресс, спорт, «плохо спала», странный день — одним голосовым, без таблицы и дневника.</li>
+          <li><strong>Итог</strong> — меньше ручного ввода, больше контекста для разбора «почему так с сахаром».</li>
+        </ul>
       </div>
     </section>
 

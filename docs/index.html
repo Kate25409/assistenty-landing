@@ -209,6 +209,41 @@
       opacity: 0.65;
     }
 
+    .gap-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+      max-width: 40rem;
+    }
+
+    .gap-list li {
+      font-size: 1.2rem;
+      line-height: 1.4;
+      padding: 1rem 1.15rem;
+      border: 3px solid #000;
+      box-shadow: var(--shadow);
+      background: #fff;
+    }
+
+    .gap-list strong {
+      font-family: var(--font-heading);
+      font-weight: 800;
+    }
+
+    .gap-list__missing {
+      margin-top: 1.25rem;
+      font-size: 1.25rem;
+      max-width: 38rem;
+      line-height: 1.45;
+    }
+
+    .gap-list__missing strong {
+      font-family: var(--font-heading);
+      font-weight: 800;
+    }
+
     .shots {
       display: flex;
       gap: 1.25rem;
@@ -400,10 +435,24 @@
       </div>
     </section>
 
+    <section class="section section--muted" id="gap">
+      <div class="wrap">
+        <div class="label">Что уже есть</div>
+        <h2>Сахар и инсулин на графиках — есть. Смысла дня — нет.</h2>
+        <p class="talk">Петли, помпы и приложения уже показывают сложные кривые. На них видны очевидные вылеты. Но без контекста дня непонятно, <strong>почему</strong> так вышло.</p>
+        <ul class="gap-list">
+          <li><strong>Есть:</strong> глюкоза, инсулин, иногда углеводы — плотные графики и отчёты.</li>
+          <li><strong>Есть:</strong> очевидные пики и провалы, которые и так бросаются в глаза.</li>
+          <li><strong>Нет:</strong> контекст дня целиком — сон, стресс, цикл, нагрузка, «что ела и когда» — в одном месте со смыслом.</li>
+        </ul>
+        <p class="gap-list__missing">Ассистент как раз про слой посередине: не ещё один график, а <strong>трактовка</strong> — связать данные с тем, что происходило в жизни.</p>
+      </div>
+    </section>
+
     <section class="section section--accent" id="looks">
       <div class="wrap">
         <div class="label">Как выглядит</div>
-        <h2>Данные о сахаре есть. Понимания, почему они такие, — ещё нет.</h2>
+        <h2>От «просто кривая» — к ответу в чате.</h2>
         <div class="shots" aria-label="Скриншоты">
           <div class="shots__col">
             <img src="assets/pics/ns_1.jpg" alt="Графики глюкозы без объяснения дня">
